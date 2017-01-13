@@ -1,0 +1,74 @@
+;zerhakka v0.1
+;4-channel gate sequencer for Busch microtronic 2090
+;for controlling 1-4 transistors/ttl connected to output port 1-4
+
+
+00	F08	clear
+01	114	movi #1,r4		;global step length (speed)
+02	108	movi #0,r8		;step 0..8 (bitmask is loaded to output ports 1..4)
+03	109	movi #0,r9
+04	10A	movi #0,rA
+05	10B	movi #0,rB
+06	10C	movi #0,rC
+07	10D	movi #0,rD
+08	10E	movi #0,rE
+09	10F	movi #0,rF
+
+0A	F02	disout			;disable display
+
+pStep1
+0B	FE8	dot r8			;output r8 to ports 1..4
+0C	449	add r4,r0		;update step length counter
+0D	F01	nop
+0E	D10	brc pStep2
+0F	C0C	goto pStep1+1
+
+pStep2
+10	FE9	dot r9
+11	440	add r4,r0
+12	F01	nop
+13	D15	brc pStep3
+14	C11	goto pStep2+1
+
+pStep3
+15	FEA	dot rA
+16	440	add r4,r0
+17	F01	nop
+18	D1A	brc pStep4
+19	C16	goto pStep3+1
+
+pStep4
+1A	FEB	dot rB
+1B	440	add r4,r0
+1C	F01	nop
+1D	D1F	brc pStep5
+1E	C1B	goto pStep4+1
+
+pStep5
+1F	FEC	dot rC
+20	440	add r4,r0
+21	F01	nop
+22	D24	brc pStep6
+23	C20	goto pStep5+1
+
+pStep6
+24	FED	dot rD
+25	440	add r4,r0
+26	F01	nop
+27	D29	brc pStep7
+28	C25	goto pStep6+1
+
+pStep7
+29	FEE	dot rE
+2A	440	add r4,r0
+2B	F01	nop
+2C	D2E	brc pStep8
+2D	C2A	brc pStep7+1
+
+pStep8
+2E	FEF	dot rF
+2F	440	add r4,r0
+30	F01	nop
+31	D0B	brc pStep1
+32	C2F	goto pStep8+1
+
